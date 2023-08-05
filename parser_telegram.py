@@ -16,7 +16,6 @@ with client: # функция которая ждет сообщение от п
 #with client: # функция которая отправляет сообщение пользователю
 #    client.loop.run_until_complete(base_telegram.send_message_to_user(client, param.username.receiver_username, "222"))
 
-
 #with client: # Вызов функции для печати списка чатов и диалогов
 #   client.loop.run_until_complete(dialogs.print_dialogs(client))
 

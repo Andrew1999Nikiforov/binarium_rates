@@ -1,5 +1,6 @@
 from telethon import events
 import param
+
 async def read_last_message(client, chat_username): # функция которая считывает последнее сообщение
     try:
         chat = await client.get_entity(chat_username)  
@@ -12,7 +13,6 @@ async def read_last_message(client, chat_username): # функция котор�
             return None
     except Exception as e:
             print(f"Ошибка при чтении последнего сообщения: {e}")
-
 
 async def read_and_send_last_message(client, chat_username, receiver_username): # функция которая считывает и отправляет сообщение пользователю 2 в 1
     try:
@@ -35,7 +35,7 @@ async def check_exit(event, client): # выход из программы
     if("exit" in str(event)): 
         await client.disconnect()
 
-async def handle_new_message(event, client):
+async def handle_new_message(event, client): # проверка сообщения на корректность
     await check_exit(event.text, client)
     await send_message_to_user(client, param.username.receiver_username, event.text)
     print(f"Получено сообщение от пользователя с ID {event.chat.title}: {event.text}")
