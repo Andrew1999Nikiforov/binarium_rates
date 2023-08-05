@@ -1,6 +1,5 @@
 from telethon import TelegramClient, events
 
-
 async def read_last_message(client, chat_username): # функция которая считывает последнее сообщение
     try:
         chat = await client.get_entity(chat_username)  
@@ -21,7 +20,7 @@ async def send_message_to_user(client, username, message): # функция ко
     except Exception as e:
         print(f"Ошибка при отправке сообщения: {e}")
 
-async def read_and_send_last_message(client, chat_username, receiver_username): # функция которая считывает и отправляет сообщение пользователю
+async def read_and_send_last_message(client, chat_username, receiver_username): # функция которая считывает и отправляет сообщение пользователю 2 в 1
     try:
         last_message = await read_last_message(client, chat_username)
         if last_message:
@@ -35,13 +34,15 @@ async def read_and_send_last_message(client, chat_username, receiver_username): 
 async def wait_for_message_from_user(client, user_id): # функция которая ждет сообщение от пользователя
     text_message = ""
     try:
+        await client.start()
         @client.on(events.NewMessage)
-        async def handle_new_message(event):
-            if event.from_id == user_id:
+        async def normal_handler(event):
+            if str(user_id) in str(event.from_id):
                 print(f"Получено сообщение от пользователя с ID {user_id}: {event.text}")
-                text_message = event.text
         await client.run_until_disconnected()
     except Exception as e:
         print(f"Произошла ошибка: {e}")
     finally:
+        await client.disconnect()
         return text_message
+        

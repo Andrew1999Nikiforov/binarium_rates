@@ -12,10 +12,10 @@ chat_username = param.username.get_message_username
 receiver_username = param.username.receiver_username
 
 with client: # функция которая ждет сообщение от пользователя
-    text_message = client.loop.run_until_complete(base_telegram.wait_for_message_from_user(client, param.username.get_message_username))
+    client.loop.run_until_complete(base_telegram.wait_for_message_from_user(client, param.username.get_message_username))
 
 with client: # функция которая отправляет сообщение пользователю
-    client.loop.run_until_complete(base_telegram.send_message_to_user(client, param.username.receiver_username, text_message))
+    client.loop.run_until_complete(base_telegram.send_message_to_user(client, param.username.receiver_username, "222"))
 
 
 #with client: # Вызов функции для печати списка чатов и диалогов
