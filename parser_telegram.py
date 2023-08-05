@@ -1,6 +1,5 @@
 from telethon.sync import TelegramClient
-from telethon import TelegramClient, events, types
-import dialogs
+from telethon import TelegramClient
 import base_telegram
 import param
 
@@ -14,8 +13,8 @@ receiver_username = param.username.receiver_username
 with client: # функция которая ждет сообщение от пользователя
     client.loop.run_until_complete(base_telegram.wait_for_message_from_user(client, param.username.get_message_username))
 
-with client: # функция которая отправляет сообщение пользователю
-    client.loop.run_until_complete(base_telegram.send_message_to_user(client, param.username.receiver_username, "222"))
+#with client: # функция которая отправляет сообщение пользователю
+#    client.loop.run_until_complete(base_telegram.send_message_to_user(client, param.username.receiver_username, "222"))
 
 
 #with client: # Вызов функции для печати списка чатов и диалогов
