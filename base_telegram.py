@@ -1,5 +1,5 @@
 from telethon import events
-import param
+import re
 
 async def read_last_message(client, chat_username): # функция которая считывает последнее сообщение
     try:
@@ -24,6 +24,10 @@ async def read_and_send_last_message(client, chat_username, receiver_username): 
     except Exception as e:
         print(f"Произошла ошибка {e}")
 
+async def check_exit(event, client): # выход из программы
+    if("exit" in str(event)): 
+        await client.disconnect()
+
 async def send_message_to_user(client, username, message): # функция которая отправляет сообщение пользователю
     try:
         await client.send_message(username, message)
@@ -31,32 +35,31 @@ async def send_message_to_user(client, username, message): # функция ко
     except Exception as e:
         print(f"Ошибка при отправке сообщения: {e}")
 
-async def check_exit(event, client): # выход из программы
-    if("exit" in str(event)): 
-        await client.disconnect()
+def parse_message(message): # Функция которая обрабатывает строку с канала
+    pattern = r'([A-Za-z]+)\s+(\d{2}:\d{2})\s+(вверх|вниз)'
+    match = re.match(pattern, message)
+    if match:
+        return match.group(1), match.group(2), match.group(3)
+    else:
+        return None
+
+message1 = "Bitcoin 15:00 вверх"
+
+parsed_message1 =  parse_message(message1)
+
+print(parsed_message1)  # ('Bitcoin', '15:00', 'вверх')
 
 async def handle_new_message(event, client): # проверка сообщения на корректность
-    await check_exit(event.text, client)
-    await send_message_to_user(client, param.username.receiver_username, event.text)
+    await check_exit(event.text, client) # Выход из программы (Потом убрать)
+    #await send_message_to_user(client, param.username.receiver_username, event.text) # Пересылаем это письмо другому человеку (Потом убрать)
     print(f"Получено сообщение от пользователя с ID {event.chat.title}: {event.text}")
+
+
 
 async def wait_for_message_from_user(client, user_id): # функция которая ждет сообщение от пользователя
     try:
         await client.start()
-
         client.add_event_handler(lambda event: handle_new_message(event, client), events.NewMessage(chats=user_id))
-
-        """
-        @client.on(events.NewMessage)
-        async def normal_handler(event):
-            if str(user_id) in str(event.from_id):
-                #print(f"Получено сообщение от пользователя с ID {user_id}: {event.text}")
-                
-                if(event.text == "exit"): # выход из программы 
-                    await client.disconnect()
-                
-                send_message_to_user(client, param.username.receiver_username, "222")
-        """
         await client.run_until_disconnected()
     except Exception as e:
         print(f"Произошла ошибка: {e}")
