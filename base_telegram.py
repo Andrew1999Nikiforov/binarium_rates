@@ -53,9 +53,7 @@ async def handle_new_message(event, client): # проверка сообщени
     #await check_exit(event.text, client) # Выход из программы (Потом убрать)
     #await send_message_to_user(client, param.username.receiver_username, event.text) # Пересылаем это письмо другому человеку (Потом убрать)
     #print(f"Получено сообщение от пользователя с ID {event.chat.title}: {event.text}")
-    parsed_message1 = await parse_message(event.text)
-    if parsed_message1:
-        send_text_to_program_y(event.text)
+    send_text_to_program_y(event.text)
 
 async def wait_for_message_from_user(client, user_id): # функция которая ждет сообщение от пользователя
     try:
