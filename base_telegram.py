@@ -1,4 +1,5 @@
 from telethon import events
+import socket
 import re
 
 async def read_last_message(client, chat_username): # функция которая считывает последнее сообщение
@@ -43,13 +44,18 @@ async def parse_message(message): # Функция которая обрабат
     else:
         return False
 
+def send_text_to_program_y(text): # Функция отвечающая за отправку данных второй программе
+    server_address = ('localhost', 14777)  # Укажите адрес и порт сервера программы Y
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        s.sendto(text.encode('utf-8'), server_address)
+
 async def handle_new_message(event, client): # проверка сообщения на корректность
-    await check_exit(event.text, client) # Выход из программы (Потом убрать)
+    #await check_exit(event.text, client) # Выход из программы (Потом убрать)
     #await send_message_to_user(client, param.username.receiver_username, event.text) # Пересылаем это письмо другому человеку (Потом убрать)
     #print(f"Получено сообщение от пользователя с ID {event.chat.title}: {event.text}")
     parsed_message1 = await parse_message(event.text)
     if parsed_message1:
-        print("Передать параметры другой программе")
+        send_text_to_program_y(event.text)
 
 async def wait_for_message_from_user(client, user_id): # функция которая ждет сообщение от пользователя
     try:
