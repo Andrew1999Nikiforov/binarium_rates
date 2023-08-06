@@ -35,26 +35,21 @@ async def send_message_to_user(client, username, message): # функция ко
     except Exception as e:
         print(f"Ошибка при отправке сообщения: {e}")
 
-def parse_message(message): # Функция которая обрабатывает строку с канала
+async def parse_message(message): # Функция которая обрабатывает строку с канала
     pattern = r'([A-Za-z]+)\s+(\d{2}:\d{2})\s+(вверх|вниз)'
     match = re.match(pattern, message)
     if match:
         return match.group(1), match.group(2), match.group(3)
     else:
-        return None
-
-message1 = "Bitcoin 15:00 вверх"
-
-parsed_message1 =  parse_message(message1)
-
-print(parsed_message1)  # ('Bitcoin', '15:00', 'вверх')
+        return False
 
 async def handle_new_message(event, client): # проверка сообщения на корректность
     await check_exit(event.text, client) # Выход из программы (Потом убрать)
     #await send_message_to_user(client, param.username.receiver_username, event.text) # Пересылаем это письмо другому человеку (Потом убрать)
-    print(f"Получено сообщение от пользователя с ID {event.chat.title}: {event.text}")
-
-
+    #print(f"Получено сообщение от пользователя с ID {event.chat.title}: {event.text}")
+    parsed_message1 = await parse_message(event.text)
+    if parsed_message1:
+        print("Передать параметры другой программе")
 
 async def wait_for_message_from_user(client, user_id): # функция которая ждет сообщение от пользователя
     try:
